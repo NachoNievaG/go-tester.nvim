@@ -6,8 +6,8 @@ Forget about opening tmux or another terminal instance to run your file/package 
 Go tester is a way to avoid the context switching in running a test suite in your golang project
 
 ## Special thanks
-@tjdevries who inspired this plugin to be created.
-For mor information about how it works in practical applications watch (This Video)[http://youtube.com/watch?v=cf72gMBrsI0]
+[tjdevries](https://github.com/tjdevries) who inspired this plugin to be created.
+For more information about how it works in practical applications watch [This Video](http://youtube.com/watch?v=cf72gMBrsI0)
 
 ## Getting started
 ### Required Dependecies
