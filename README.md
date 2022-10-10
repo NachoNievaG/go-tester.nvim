@@ -11,24 +11,24 @@ For mor information about how it works in practical applications watch (This Vid
 
 ## Getting started
 ### Required Dependecies
-* (nvim 0.8.0)[https://github.com/neovim/neovim/releases/tag/v0.8.0] or higher
-* (nvim-treesitter/nvim-treesitter)[https://github.com/nvim-treesitter/nvim-treesitter]
+* [nvim 0.8.0](https://github.com/neovim/neovim/releases/tag/v0.8.0) or higher
+* [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
 ## How to install it
 
-Using (vim-plug)[https://github.com/junegunn/vim-plug]
+Using [vim-plug](https://github.com/junegunn/vim-plug)
 ```viml
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nachonievag/go-tester.nvim'
 ``` 
 
-Using (dein)[https://github.com/Shougo/dein.vim]
+Using [dein](https://github.com/Shougo/dein.vim)
 ```viml
 call dein#add('nvim-treesitter/nvim-treesitter')
 call dein#add('nachonievag/go-tester.nvim')
 ``` 
 
-Using (Packer)[https://github.com/wbthomason/packer.nvim]
+Using [Packer](https://github.com/wbthomason/packer.nvim)
 ```lua
 use {
   'nachonievag/go-tester.nvim',
