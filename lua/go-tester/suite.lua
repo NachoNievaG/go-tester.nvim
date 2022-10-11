@@ -22,6 +22,13 @@ local TSQuery = [[
 )
 ]]
 
+local function redefine_augroup(bufnr)
+  vim.diagnostic.reset(ns, bufnr)
+  vim.api.nvim_del_augroup_by_id(group)
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  group = vim.api.nvim_create_augroup("go-tester", { clear = true })
+end
+
 local function find_test_line(go_bufnr, name)
   local formatted = string.format(TSQuery, name)
   local query = vim.treesitter.parse_query("go", formatted)
@@ -77,7 +84,7 @@ local function attach_to_buffer(bufnr, command)
     bufnr = bufnr,
     tests = {},
   }
-  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  redefine_augroup(bufnr)
 
   vim.api.nvim_buf_create_user_command(bufnr, "GoTestLineDiag", function()
     local line = vim.fn.line "." - 1
@@ -163,28 +170,23 @@ local function attach_to_buffer(bufnr, command)
 end
 
 local function isValidTestFile(s)
-  if not (string.find(s, "(.+_test.go)")) then
-    return false
-  end
-  return true
+  assert(string.find(s, "(.+_test.go)"), "current buffer is not a go test file", vim.inspect(s))
 end
 
+-- Scope the buffer's current package in the aucmd
 function M.startPackageTest()
   local buf_path = vim.api.nvim_buf_get_name(0)
-  if not isValidTestFile(buf_path) then
-    print("non go test file encountered")
-    return
-  end
+  isValidTestFile(buf_path)
+
   local route = string.match(buf_path, "(.+/)") .. "..."
   attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "-v", "-json", "-failfast", route })
 end
 
+-- Scope only a file in the aucmd
 function M.startFileTest()
   local buf_path = vim.api.nvim_buf_get_name(0)
-  if not isValidTestFile(buf_path) then
-    print("non go test file encountered")
-    return
-  end
+  isValidTestFile(buf_path)
+
   attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "-v", "-json", "-failfast", buf_path })
 end
 
