@@ -2,6 +2,16 @@ local M = {}
 
 local ns = vim.api.nvim_create_namespace "live-tests"
 local group = vim.api.nvim_create_augroup("go-tester", { clear = true })
+local go_test_command = { "go", "test", "-v", "-json" }
+
+M.setup = function(opts)
+  if opts.flags then
+    for _, flag in pairs(opts.flags) do
+      table.insert(go_test_command, flag)
+    end
+  end
+
+end
 
 local TSQuery = [[
 (
@@ -98,7 +108,7 @@ local function attach_to_buffer(bufnr, command)
 
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = group,
-    pattern = "*_test.go",
+    pattern = "*.go",
     callback = function()
       vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
       state = {
@@ -167,6 +177,8 @@ local function attach_to_buffer(bufnr, command)
       })
     end,
   })
+  -- trigger the event the first time
+  vim.api.nvim_exec_autocmds("BufWritePost", { group = group })
 end
 
 local function isValidTestFile(s)
@@ -179,15 +191,19 @@ function M.startPackageTest()
   isValidTestFile(buf_path)
 
   local route = string.match(buf_path, "(.+/)") .. "..."
-  attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "-v", "-json", "-failfast", route })
+  table.insert(go_test_command, route)
+
+  attach_to_buffer(vim.api.nvim_get_current_buf(), go_test_command)
 end
 
 -- Scope only a file in the aucmd
 function M.startFileTest()
   local buf_path = vim.api.nvim_buf_get_name(0)
-  isValidTestFile(buf_path)
 
-  attach_to_buffer(vim.api.nvim_get_current_buf(), { "go", "test", "-v", "-json", "-failfast", buf_path })
+  isValidTestFile(buf_path)
+  table.insert(go_test_command, buf_path)
+
+  attach_to_buffer(vim.api.nvim_get_current_buf(), go_test_command)
 end
 
 return M
