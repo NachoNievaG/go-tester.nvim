@@ -5,12 +5,29 @@ local group = vim.api.nvim_create_augroup("go-tester", { clear = true })
 local go_test_command = { "go", "test", "-v", "-json" }
 
 M.setup = function(opts)
+  print("i'm here")
+  if not opts then
+    return
+  end
   if opts.flags then
     for _, flag in pairs(opts.flags) do
+      print(flag)
       table.insert(go_test_command, flag)
     end
   end
+end
 
+function M.set_user_commands()
+  local command = vim.api.nvim_create_user_command
+  print('commands')
+
+  command("GoTestPackageOnSave", function()
+    M.startPackageTest()
+  end, {})
+
+  command("GoTestFileOnSave", function()
+    M.startFileTest()
+  end, {})
 end
 
 local TSQuery = [[
