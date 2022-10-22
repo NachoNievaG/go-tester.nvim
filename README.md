@@ -53,8 +53,8 @@ use {
   end
 }
 ``` 
-In this case, we shall see as the user command is executed, that the command executed is:
-`go test $exec_path -v -json -failfast -race -cover`<br>
+In this case, we shall see as the user command is executed, that the command executed is:<br>
+`go test $exec_path -v -json -failfast -race -cover`
 
 
 
