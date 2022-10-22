@@ -3,7 +3,8 @@
 Forget about opening tmux or another terminal instance to run your file/package tests.
 
 ## What is go-tester? 
-Go tester is a way to avoid the context switching in running a test suite in your golang project
+Go tester is a way to avoid the context switching in running a test suite in your golang project.<br>
+As soon as you run the command, you can begin to fix all from tests to actual source code, just for the tests to be re-run as soon as you save the files you are coding in.
 
 ![Imgur](https://imgur.com/gOOQOBV.gif)
 
@@ -37,6 +38,25 @@ use {
   requires = { {'nvim-treesitter/nvim-treesitter'} }
 }
 ``` 
+
+## Configurations
+You can specify the several flags to execute the go test command.<br>
+As it is today the defined command to execute is:<br>
+`go test $exec_path -v -json`<br>
+This flags are mandatory for the plugin to work, yet you could add the ones you need at will.
+```lua
+use {
+  "nachonievag/go-tester.nvim",
+  requires = "nvim-treesitter/nvim-treesitter",
+  config = function()
+    require("go-tester").setup({ flags = { "-failfast", "-race", "-cover" } })
+  end
+}
+``` 
+In this case, we shall see as the user command is executed, that the command executed is:
+`go test $exec_path -v -json -failfast -race -cover`<br>
+
+
 
 ## Commands
 | Commands                   | Description                                                                                 |
